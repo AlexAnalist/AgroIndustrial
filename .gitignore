@@ -1,0 +1,12 @@
+# Archivos de entorno en la raíz
+.env
+.env.*
+
+# Editor y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
