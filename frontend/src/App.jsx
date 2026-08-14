@@ -185,7 +185,7 @@ function MainApp() {
       const [resArticles, resVideos, resGallery] = await Promise.all([
         fetch(`${apiUrl}/articles/`).catch(() => null),
         fetch(`${apiUrl}/videos/`).catch(() => null),
-        fetch(`${apiUrl}/gallery_images/`).catch(() => null)
+        fetch(`${apiUrl}/gallery/`).catch(() => null)
       ]);
 
       const rawArticles = resArticles && resArticles.ok ? await resArticles.json() : [];
