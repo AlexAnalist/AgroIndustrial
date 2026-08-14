@@ -108,7 +108,7 @@ function MainApp() {
   const fetchFeedData = async () => {
     setLoadingFeed(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const apiUrl = import.meta.env.VITE_API_URL || '/api';
 
       const [resArticles, resVideos, resGallery] = await Promise.all([
         fetch(`${apiUrl}/articles/`).catch(() => null),
@@ -180,7 +180,7 @@ function MainApp() {
     if (!window.confirm('¿Estás seguro de que deseas eliminar esta publicación?')) return;
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const apiUrl = import.meta.env.VITE_API_URL || '/api';
       const res = await fetch(`${apiUrl}/${endpoint}/${id}`, {
         method: 'DELETE',
       });
