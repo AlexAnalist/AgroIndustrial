@@ -76,6 +76,78 @@ const getVideoThumbnail = (item) => {
   return 'https://images.unsplash.com/photo-1595838729986-19293a2be187?q=80&w=600&auto=format&fit=crop';
 };
 
+// 🛠️ COMPONENTE AUXILIAR QUIRÚRGICO: Tarjeta de Video con descripción expandible
+const VideoCardItem = ({ item, isOwner, handleDelete }) => {
+  const [expanded, setExpanded] = useState(false);
+  const videoThumb = getVideoThumbnail(item);
+  const descriptionText = item.description || '';
+  const isLong = descriptionText.length > 100;
+
+  return (
+    <div className="bg-white border border-emerald-100/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-emerald-300 transition-all flex flex-col justify-between">
+      <div>
+        <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
+          <img
+            src={videoThumb}
+            alt={item.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          {item.category && (
+            <span className="absolute top-3 left-3 text-[11px] font-bold uppercase tracking-wider text-emerald-800 bg-white/90 backdrop-blur px-3 py-1 rounded-full border border-emerald-200 shadow-sm">
+              🎬 {item.category}
+            </span>
+          )}
+        </div>
+
+        <div className="p-6 space-y-3">
+          <div className="flex justify-between items-start gap-2">
+            <h3 className="text-lg font-bold text-slate-800">{item.title}</h3>
+            {isOwner(item) && (
+              <button
+                onClick={() => handleDelete('videos', item.id)}
+                className="text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1 rounded-lg transition-all"
+                title="Eliminar mi vídeo"
+              >
+                🗑️
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <p className="text-slate-600 text-sm leading-relaxed">
+              {expanded || !isLong ? descriptionText : `${descriptionText.substring(0, 100)}...`}
+            </p>
+            {isLong && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 hover:underline cursor-pointer focus:outline-none"
+              >
+                {expanded ? '▲ Mostrar menos' : '📖 Leer descripción completa'}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-6 pb-6 pt-2 space-y-3">
+        <a
+          href={item.video_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full inline-flex items-center justify-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-sm py-2.5 px-4 rounded-xl transition-all border border-emerald-200"
+        >
+          ▶️ Ver Multimedia
+        </a>
+        <div className="text-xs text-slate-500 border-t border-slate-100 pt-2 flex items-center justify-between">
+          <span>
+            👤 Publicado por: <strong className="text-slate-700">{formatAuthorName(item)}</strong>
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function MainApp() {
   const { user, signOut, isRecoveringPassword, setIsRecoveringPassword } = useAuth();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -325,58 +397,9 @@ function MainApp() {
     if (type === 'videos') {
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {items.map((item) => {
-            const videoThumb = getVideoThumbnail(item);
-
-            return (
-              <div key={item.id} className="bg-white border border-emerald-100/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-emerald-300 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
-                    <img
-                      src={videoThumb}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {item.category && (
-                      <span className="absolute top-3 left-3 text-[11px] font-bold uppercase tracking-wider text-emerald-800 bg-white/90 backdrop-blur px-3 py-1 rounded-full border border-emerald-200 shadow-sm">
-                        🎬 {item.category}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="p-6 space-y-3">
-                    <div className="flex justify-between items-start gap-2">
-                      <h3 className="text-lg font-bold text-slate-800">{item.title}</h3>
-                      {isOwner(item) && (
-                        <button
-                          onClick={() => handleDelete('videos', item.id)}
-                          className="text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1 rounded-lg transition-all"
-                          title="Eliminar mi vídeo"
-                        >
-                          🗑️
-                        </button>
-                      )}
-                    </div>
-                    <p className="text-slate-600 text-sm line-clamp-2">{item.description}</p>
-                  </div>
-                </div>
-
-                <div className="px-6 pb-6 pt-2 space-y-3">
-                  <a
-                    href={item.video_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-sm py-2.5 px-4 rounded-xl transition-all border border-emerald-200"
-                  >
-                    ▶️ Ver Multimedia
-                  </a>
-                  <div className="text-xs text-slate-500 border-t border-slate-100 pt-2 flex items-center justify-between">
-                    <span>👤 Publicado por: <strong className="text-slate-700">{formatAuthorName(item)}</strong></span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {items.map((item) => (
+            <VideoCardItem key={item.id} item={item} isOwner={isOwner} handleDelete={handleDelete} />
+          ))}
         </div>
       );
     }
