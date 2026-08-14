@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
-from typing import List
+from typing import List, Optional, Any
 from uuid import UUID
 from supabase import Client
 
