@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from typing import List
 from uuid import UUID
 from supabase import Client
@@ -12,7 +12,7 @@ except ModuleNotFoundError:
     from supabase_client import get_supabase
     import models
     from utils import prepare_data_for_supabase
-    
+
 router = APIRouter(prefix="/api/articles", tags=["Articles"])
 
 
