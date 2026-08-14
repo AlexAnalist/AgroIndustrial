@@ -5,13 +5,13 @@ from supabase import Client
 
 # ✅ IMPORTS COMPATIBLES CON VERCEL Y DESARROLLO LOCAL
 try:
-    from backend.supabase_client import get_supabase
+    from backend.supabase_client import get_supabase, SUPABASE_BUCKET
     from backend import models
-    from backend.utils import prepare_data_for_supabase
+    from backend.utils import prepare_data_for_supabase, process_and_upload_image
 except ModuleNotFoundError:
-    from supabase_client import get_supabase
+    from supabase_client import get_supabase, SUPABASE_BUCKET
     import models
-    from utils import prepare_data_for_supabase
+    from utils import prepare_data_for_supabase, process_and_upload_image
 
 router = APIRouter(prefix="/api/gallery", tags=["Gallery"])
 
