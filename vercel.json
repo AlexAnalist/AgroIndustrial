@@ -9,14 +9,14 @@
             "entrypoint": "main.py"
         }
     },
-    "routes": [
+    "rewrites": [
         {
-            "src": "/api/(.*)",
-            "dest": "/backend/$1"
+            "source": "/api/:path*",
+            "destination": "/backend/:path*"
         },
         {
-            "src": "/(.*)",
-            "dest": "/frontend/$1"
+            "source": "/:path*",
+            "destination": "/frontend/:path*"
         }
     ]
 }
