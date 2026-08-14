@@ -254,7 +254,7 @@ function MainApp() {
     try {
       const apiUrl = import.meta.env.VITE_API_URL || '/api';
 
-      const res = await fetch(`${apiUrl}/${endpoint === 'gallery' ? 'gallery_images' : endpoint}/${id}`, {
+      const res = await fetch(`${apiUrl}/${endpoint}/${id}`, {
         method: 'DELETE',
       });
 
