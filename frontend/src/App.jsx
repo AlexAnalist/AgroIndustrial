@@ -185,7 +185,7 @@ function MainApp() {
       const [resArticles, resVideos, resGallery] = await Promise.all([
         fetch(`${apiUrl}/articles/`).catch(() => null),
         fetch(`${apiUrl}/videos/`).catch(() => null),
-        fetch(`${apiUrl}/gallery/`).catch(() => null)
+        fetch(`${apiUrl}/gallery_images/`).catch(() => null)
       ]);
 
       const rawArticles = resArticles && resArticles.ok ? await resArticles.json() : [];
@@ -253,7 +253,8 @@ function MainApp() {
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL || '/api';
-      const res = await fetch(`${apiUrl}/${endpoint}/${id}`, {
+
+      const res = await fetch(`${apiUrl}/${endpoint === 'gallery' ? 'gallery_images' : endpoint}/${id}`, {
         method: 'DELETE',
       });
 
