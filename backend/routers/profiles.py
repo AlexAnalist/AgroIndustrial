@@ -2,9 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from uuid import UUID
 from supabase import Client
-from supabase_client import get_supabase
-import models
-from utils import prepare_data_for_supabase
+
+# ✅ IMPORTS COMPATIBLES CON VERCEL Y DESARROLLO LOCAL
+try:
+    from backend.supabase_client import get_supabase
+    from backend import models
+    from backend.utils import prepare_data_for_supabase
+except ModuleNotFoundError:
+    from supabase_client import get_supabase
+    import models
+    from utils import prepare_data_for_supabase
 
 router = APIRouter(prefix="/api/profiles", tags=["Profiles"])
 

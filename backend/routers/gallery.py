@@ -1,11 +1,17 @@
-import os
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, status
-from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List
 from uuid import UUID
 from supabase import Client
-from supabase_client import get_supabase, SUPABASE_BUCKET
-import models
-from utils import prepare_data_for_supabase, process_and_upload_image
+
+# ✅ IMPORTS COMPATIBLES CON VERCEL Y DESARROLLO LOCAL
+try:
+    from backend.supabase_client import get_supabase
+    from backend import models
+    from backend.utils import prepare_data_for_supabase
+except ModuleNotFoundError:
+    from supabase_client import get_supabase
+    import models
+    from utils import prepare_data_for_supabase
 
 router = APIRouter(prefix="/api/gallery", tags=["Gallery"])
 

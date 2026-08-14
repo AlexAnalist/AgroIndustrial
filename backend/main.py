@@ -7,13 +7,19 @@ from dotenv import load_dotenv
 # Load environmental variables
 load_dotenv()
 
-# Import Supabase Client & Utilities
-from supabase_client import get_supabase, SUPABASE_BUCKET
-from utils import process_and_upload_image, prepare_data_for_supabase
-import models
-
-# Import modular routers
-from routers import profiles, articles, videos, gallery
+# ✅ IMPORTS CORREGIDOS PARA VERCEL SERVERLESS:
+try:
+    # Intenta importar usando la ruta del monorrepo (Vercel)
+    from backend.supabase_client import get_supabase, SUPABASE_BUCKET
+    from backend.utils import process_and_upload_image, prepare_data_for_supabase
+    from backend import models
+    from backend.routers import profiles, articles, videos, gallery
+except ModuleNotFoundError:
+    # Fallback si ejecutas directo desde la carpeta backend (Desarrollo Local)
+    from supabase_client import get_supabase, SUPABASE_BUCKET
+    from utils import process_and_upload_image, prepare_data_for_supabase
+    import models
+    from routers import profiles, articles, videos, gallery
 
 # Initialize FastAPI App
 app = FastAPI(
@@ -72,10 +78,8 @@ async def legacy_upload_image(
     Maps the input 'category' to the new schema's 'description' field.
     """
     try:
-        # Read uploaded image bytes
         file_bytes = await file.read()
         
-        # Call optimized process & upload helper
         public_url = process_and_upload_image(
             supabase_client=db,
             file_bytes=file_bytes,
@@ -83,7 +87,6 @@ async def legacy_upload_image(
             bucket_name=SUPABASE_BUCKET
         )
         
-        # Build gallery image model mapping category to description
         new_image = models.GalleryImageCreate(
             title=title,
             description=f"Categoría: {category}",
